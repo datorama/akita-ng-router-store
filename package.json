@@ -10,6 +10,23 @@
       "entryFile": "./src/index.ts"
     }
   },
+  "bugs": {
+    "url": "https://github.com/datorama/akita-ng-router-store/issues"
+  },
+  "homepage": "https://github.com/datorama/akita-ng-router-store#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/datorama/akita-ng-router-store"
+  },
+  "keywords": [
+    "angular",
+    "akita router",
+    "angular angular router"
+  ],
+  "maintainers": [
+    "Netanel Basal",
+    "Shahar Kazaz"
+  ],
   "main": "index.js",
   "license": "MIT",
   "devDependencies": {
