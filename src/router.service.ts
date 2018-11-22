@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
   NavigationCancel,
@@ -6,14 +6,14 @@ import {
   Router,
   RouterStateSnapshot,
   RoutesRecognized
-} from "@angular/router";
-import { of } from "rxjs";
-import { RouterStore } from "./router.store";
-import { RouterQuery } from "./router.query";
-import { __globalState, action } from "@datorama/akita";
+} from '@angular/router';
+import { of } from 'rxjs';
+import { RouterStore } from './router.store';
+import { RouterQuery } from './router.query';
+import { __globalState, action } from '@datorama/akita';
 
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root'
 })
 export class RouterService {
   private routerStateSnapshot;
@@ -28,17 +28,17 @@ export class RouterService {
     private router: Router
   ) {}
 
-  @action({ type: "Navigation Cancelled" })
+  @action({ type: 'Navigation Cancelled' })
   dispatchRouterCancel(event: NavigationCancel) {
     this.update();
   }
 
-  @action({ type: "Navigation Error" })
+  @action({ type: 'Navigation Error' })
   dispatchRouterError(event: NavigationError) {
     this.update();
   }
 
-  @action({ type: "Navigation" })
+  @action({ type: 'Navigation' })
   dispatchRouterNavigation() {
     this.update();
   }
@@ -55,7 +55,9 @@ export class RouterService {
       return {
         ...state,
         state: this.routerStateSnapshot,
-        navigationId: this.lastRoutesRecognized.id
+        navigationId: this.lastRoutesRecognized
+          ? this.lastRoutesRecognized.id
+          : null
       };
     });
     this.dispatchTriggeredByRouter = false;
@@ -81,10 +83,12 @@ export class RouterService {
   }
 
   private setUpStoreListener(): void {
-    this.routerQuery.select(state => state).subscribe(s => {
-      this.routerState = s;
-      this.navigateIfNeeded();
-    });
+    this.routerQuery
+      .select(state => state)
+      .subscribe(s => {
+        this.routerState = s;
+        this.navigateIfNeeded();
+      });
   }
 
   private shouldDispatchRouterNavigation(): boolean {
