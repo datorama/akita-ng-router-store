@@ -13,3 +13,11 @@ imports: [environment.production ? [] :
 export class AppModule {
 }
 ```
+
+## Lazy Load Modules
+
+To get the lazy modules routing params, please add the following option to your module:
+
+```ts
+  imports: [RouterModule.forRoot(routes, { paramsInheritanceStrategy: 'always' })],
+```
