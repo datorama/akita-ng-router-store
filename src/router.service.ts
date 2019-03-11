@@ -10,7 +10,7 @@ import {
 import { of } from 'rxjs';
 import { RouterStore } from './router.store';
 import { RouterQuery } from './router.query';
-import { __globalState, action } from '@datorama/akita';
+import { action, setSkipAction } from '@datorama/akita';
 
 @Injectable({
   providedIn: 'root'
@@ -22,23 +22,19 @@ export class RouterService {
   private navigationTriggeredByDispatch = false;
   private routerState;
 
-  constructor(
-    private routerStore: RouterStore,
-    private routerQuery: RouterQuery,
-    private router: Router
-  ) {}
+  constructor(private routerStore: RouterStore, private routerQuery: RouterQuery, private router: Router) {}
 
-  @action({ type: 'Navigation Cancelled' })
+  @action('Navigation Cancelled')
   dispatchRouterCancel(event: NavigationCancel) {
     this.update();
   }
 
-  @action({ type: 'Navigation Error' })
+  @action('Navigation Error')
   dispatchRouterError(event: NavigationError) {
     this.update();
   }
 
-  @action({ type: 'Navigation' })
+  @action('Navigation')
   dispatchRouterNavigation() {
     this.update();
   }
@@ -51,13 +47,11 @@ export class RouterService {
 
   private update() {
     this.dispatchTriggeredByRouter = true;
-    this.routerStore.setState(state => {
+    this.routerStore.update(state => {
       return {
         ...state,
         state: this.routerStateSnapshot,
-        navigationId: this.lastRoutesRecognized
-          ? this.lastRoutesRecognized.id
-          : null
+        navigationId: this.lastRoutesRecognized ? this.lastRoutesRecognized.id : null
       };
     });
     this.dispatchTriggeredByRouter = false;
@@ -69,15 +63,12 @@ export class RouterService {
    * since the route tree can be large, we serialize it into something more manageable
    */
   private setUpRouterHook(): void {
-    (this.router as any).hooks.beforePreactivation = (
-      routerStateSnapshot: RouterStateSnapshot
-    ) => {
+    (this.router as any).hooks.beforePreactivation = (routerStateSnapshot: RouterStateSnapshot) => {
       this.routerStateSnapshot = {
         root: this.serializeRoute(routerStateSnapshot.root),
         url: routerStateSnapshot.url
       };
-      if (this.shouldDispatchRouterNavigation())
-        this.dispatchRouterNavigation();
+      if (this.shouldDispatchRouterNavigation()) this.dispatchRouterNavigation();
       return of(true);
     };
   }
@@ -104,7 +95,7 @@ export class RouterService {
 
     if (this.router.url !== this.routerState.state.url) {
       this.navigationTriggeredByDispatch = true;
-      __globalState.setSkipAction();
+      setSkipAction();
       this.router.navigateByUrl(this.routerState.state.url);
     }
   }
@@ -121,21 +112,12 @@ export class RouterService {
     });
   }
 
-  private serializeRoute(
-    route: ActivatedRouteSnapshot
-  ): Partial<ActivatedRouteSnapshot> {
+  private serializeRoute(route: ActivatedRouteSnapshot): Partial<ActivatedRouteSnapshot> {
     let state: ActivatedRouteSnapshot = route.root;
     while (state.firstChild) {
       state = state.firstChild;
     }
-    const {
-      params,
-      data,
-      paramMap,
-      queryParamMap,
-      queryParams,
-      fragment
-    } = state;
+    const { params, data, paramMap, queryParamMap, queryParams, fragment } = state;
 
     return {
       url: route.url,
