@@ -1,6 +1,6 @@
 {
   "name": "@datorama/akita-ng-router-store",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "Bindings to connect the Angular Router with Akita store",
   "scripts": {
     "build": "ng-packagr -p package.json"
@@ -29,9 +29,6 @@
   ],
   "main": "index.js",
   "license": "MIT",
-  "peerDependencies": {
-    "@datorama/akita": "^3.4.0"
-  },
   "devDependencies": {
     "@angular/common": "7.2.7",
     "@angular/compiler": "7.2.7",
