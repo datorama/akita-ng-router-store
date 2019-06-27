@@ -3,7 +3,7 @@ import { RouterStore, RouterState } from './router.store';
 import { Query, HashMap, filterNil } from '@datorama/akita';
 import { Observable, combineLatest } from 'rxjs';
 import { map, pluck } from 'rxjs/operators';
-import { RouterStateSnapshot } from '@angular/router';
+import { RouterStateSnapshot, Data } from '@angular/router';
 
 function slice(section: string) {
   return (source: Observable<RouterState<RouterStateSnapshot>>) => {
@@ -106,16 +106,29 @@ export class RouterQuery extends Query<RouterState> {
     return null;
   }
 
-  selectData<T>(name: string): Observable<T> {
+  selectData<T>(name: string): Observable<T>;
+  selectData<T>(): Observable<HashMap<T>>;
+  selectData<T>(name?: string): Observable<T | HashMap<T>> {
+    if (name === undefined) {
+      return this.select().pipe(slice('data'));
+    }
+
     return this.select().pipe(
       slice('data'),
       pluck(name)
     );
   }
 
-  getData<T>(): T | null {
+  getData<T>(name: string): T | null;
+  getData<T>(): Data | null;
+  getData<T>(name?: string): Data | null {
     if (this.getValue().state) {
-      return this.getValue().state!.root.data[name];
+      const data = this.getValue().state!.root.data;
+      if (name === undefined) {
+        return data;
+      }
+
+      return data[name];
     }
 
     return null;
