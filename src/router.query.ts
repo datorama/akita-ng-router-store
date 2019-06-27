@@ -20,10 +20,10 @@ export class RouterQuery extends Query<RouterState> {
     super(store);
   }
 
-  selectParam<T>(names: string): Observable<T>;
-  selectParam<T>(names: string[]): Observable<T[]>;
-  selectParam<T>(): Observable<HashMap<T>>;
-  selectParam<T>(names?: string | string[]): Observable<T | T[] | HashMap<T>> {
+  selectParams<T>(names: string): Observable<T>;
+  selectParams<T>(names: string[]): Observable<T[]>;
+  selectParams<T>(): Observable<HashMap<T>>;
+  selectParams<T>(names?: string | string[]): Observable<T | T[] | HashMap<T>> {
     if (names === undefined) {
       return this.select().pipe(slice('params'));
     }
@@ -42,9 +42,9 @@ export class RouterQuery extends Query<RouterState> {
     return select(names);
   }
 
-  getParam<T>(): HashMap<T>;
-  getParam<T>(name: string): T;
-  getParam<T>(name?: string): T | HashMap<any> | null {
+  getParams<T>(): HashMap<T>;
+  getParams<T>(name: string): T;
+  getParams<T>(name?: string): T | HashMap<any> | null {
     if (this.getValue().state) {
       const params = this.getValue().state!.root.params;
       if (name === undefined) {
@@ -57,10 +57,10 @@ export class RouterQuery extends Query<RouterState> {
     return null;
   }
 
-  selectQueryParam<T>(names: string): Observable<T>;
-  selectQueryParam<T>(names: string[]): Observable<T[]>;
-  selectQueryParam<T>(): Observable<HashMap<T>>;
-  selectQueryParam<T>(names?: string | string[]): Observable<T | T[] | HashMap<T>> {
+  selectQueryParams<T>(names: string): Observable<T>;
+  selectQueryParams<T>(names: string[]): Observable<T[]>;
+  selectQueryParams<T>(): Observable<HashMap<T>>;
+  selectQueryParams<T>(names?: string | string[]): Observable<T | T[] | HashMap<T>> {
     if (names === undefined) {
       return this.select().pipe(slice('queryParams'));
     }
@@ -79,9 +79,9 @@ export class RouterQuery extends Query<RouterState> {
     return select(names);
   }
 
-  getQueryParam<T>(name: string): T;
-  getQueryParam<T>(): HashMap<T>;
-  getQueryParam<T>(name?: string): T | HashMap<T> | null {
+  getQueryParams<T>(name: string): T;
+  getQueryParams<T>(): HashMap<T>;
+  getQueryParams<T>(name?: string): T | HashMap<T> | null {
     if (this.getValue().state) {
       const params = this.getValue().state!.root.params;
       if (name === undefined) {
