@@ -16,11 +16,11 @@ import { action, setSkipAction } from '@datorama/akita';
   providedIn: 'root'
 })
 export class RouterService {
-  private routerStateSnapshot;
-  private lastRoutesRecognized: RoutesRecognized;
+  private routerStateSnapshot: any;
+  private lastRoutesRecognized: any;
   private dispatchTriggeredByRouter = false;
   private navigationTriggeredByDispatch = false;
-  private routerState;
+  private routerState: any;
 
   constructor(private routerStore: RouterStore, private routerQuery: RouterQuery, private router: Router) {}
 
@@ -47,7 +47,7 @@ export class RouterService {
 
   private update() {
     this.dispatchTriggeredByRouter = true;
-    this.routerStore.update(state => {
+    this.routerStore.update((state: any) => {
       return {
         ...state,
         state: this.routerStateSnapshot,

@@ -3,8 +3,8 @@ import { RouterStateSnapshot } from '@angular/router';
 import { Store, StoreConfig } from '@datorama/akita';
 
 export type RouterState<T = RouterStateSnapshot> = {
-  state: T;
-  navigationId: number;
+  state: T | null;
+  navigationId: number | null;
 };
 
 export function createInitialRouterState(): RouterState {
