@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { RouterStore, RouterState } from './router.store';
 import { Query, HashMap, filterNil } from '@datorama/akita';
 import { Observable, combineLatest } from 'rxjs';
-import { map, pluck } from 'rxjs/operators';
+import { map, pluck, distinctUntilChanged } from 'rxjs/operators';
 import { RouterStateSnapshot, Data } from '@angular/router';
 
 function slice(section: string) {
@@ -25,13 +25,14 @@ export class RouterQuery extends Query<RouterState> {
   selectParams<T>(): Observable<HashMap<T>>;
   selectParams<T>(names?: string | string[]): Observable<T | T[] | HashMap<T>> {
     if (names === undefined) {
-      return this.select().pipe(slice('params'));
+      return this.select().pipe(slice('params'), distinctUntilChanged());
     }
 
     const select = (p: string) =>
       this.select().pipe(
         slice('params'),
-        pluck(p)
+        pluck(p),
+        distinctUntilChanged()
       );
 
     if (Array.isArray(names)) {
@@ -39,7 +40,7 @@ export class RouterQuery extends Query<RouterState> {
       return combineLatest(sources);
     }
 
-    return select(names);
+    return select(names).pipe(distinctUntilChanged());
   }
 
   getParams<T>(): HashMap<T>;
@@ -62,13 +63,14 @@ export class RouterQuery extends Query<RouterState> {
   selectQueryParams<T>(): Observable<HashMap<T>>;
   selectQueryParams<T>(names?: string | string[]): Observable<T | T[] | HashMap<T>> {
     if (names === undefined) {
-      return this.select().pipe(slice('queryParams'));
+      return this.select().pipe(slice('queryParams'), distinctUntilChanged());
     }
 
     const select = (p: string) =>
       this.select().pipe(
         slice('queryParams'),
-        pluck(p)
+        pluck(p),
+        distinctUntilChanged()
       );
 
     if (Array.isArray(names)) {
@@ -95,7 +97,7 @@ export class RouterQuery extends Query<RouterState> {
   }
 
   selectFragment(): Observable<string> {
-    return this.select().pipe(slice('fragment'));
+    return this.select().pipe(slice('fragment'), distinctUntilChanged());
   }
 
   getFragment(): string | null {
@@ -110,12 +112,13 @@ export class RouterQuery extends Query<RouterState> {
   selectData<T>(): Observable<HashMap<T>>;
   selectData<T>(name?: string): Observable<T | HashMap<T>> {
     if (name === undefined) {
-      return this.select().pipe(slice('data'));
+      return this.select().pipe(slice('data'), distinctUntilChanged());
     }
 
     return this.select().pipe(
       slice('data'),
-      pluck(name)
+      pluck(name),
+      distinctUntilChanged()
     );
   }
 
