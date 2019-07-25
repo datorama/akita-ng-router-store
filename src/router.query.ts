@@ -85,7 +85,7 @@ export class RouterQuery extends Query<RouterState> {
   getQueryParams<T>(): HashMap<T>;
   getQueryParams<T>(name?: string): T | HashMap<T> | null {
     if (this.getValue().state) {
-      const params = this.getValue().state!.root.params;
+      const params = this.getValue().state!.root.queryParams;
       if (name === undefined) {
         return params;
       }
