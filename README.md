@@ -8,7 +8,7 @@ import { AkitaNgRouterStoreModule } from '@datorama/akita-ng-router-store';
 ​
 ​@NgModule({
 imports: [environment.production ? [] :
-  [ AkitaNgDevtools.forRoot(), AkitaNgRouterStoreModule.forRoot() ]
+  [ AkitaNgDevtools.forRoot(), AkitaNgRouterStoreModule ]
 })
 export class AppModule {
 }
