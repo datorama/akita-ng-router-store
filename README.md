@@ -1,4 +1,4 @@
-**Moved to the official repo.
+**Moved to the official repo.**
 
 Bindings to connect Angular router to Akita store.
 
